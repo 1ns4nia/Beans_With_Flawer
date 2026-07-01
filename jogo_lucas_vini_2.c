@@ -397,7 +397,7 @@ int fuga(){
     if(fator<10){
         gotoxy(y,x);
         printf("Golpe de Sorte deu errado, voce tomou dano!!!");
-        sleep(1000);
+        Sleep(1000);
         heroi.vida = heroi.vida - 5;
         Beep(200, 300);
         Sleep(1500);
