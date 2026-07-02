@@ -9,10 +9,12 @@ int amp = 1;
 int ampmonstro = 2;
 int contfase = 1;
 int contm = 0;
+int a = 0, b = 0, c = 0, guarda; //variaveis do rank()
 int contmonstruso = 0;
 int tam = 7;
 int perigo = 0;
 int fase = 0;
+int pontuacao = 0;
 int dinheiro = 0;
 struct status{
     int vida, dfs, atq, posx, posy, chave;
@@ -117,11 +119,11 @@ void gotoxy(int x, int y){
     int l,c;
     int borda[2][6]={{205,186,201,187,200,188}, //tipos de borda, os numeros sao caracteres Ascii
                     {196,'|',218,191,192,217}};
-    for(c = colunaInicial+1; c <= colunaFinal-1; c++){//printa a as bordas de cima e baixo de esquerda pra direita, usa-se coluna +1 coluna -1 pra poder deixar espaço pras bordas
+    for(c = colunaInicial+1; c <= colunaFinal-1; c++){//printa a as bordas de cima e baixo de esquerda pra direita, usa-se coluna +1 coluna -1 pra poder deixar espaï¿½o pras bordas
         gotoxy(c,linhaInicial); printf("%c", borda[tipo][0]);
         gotoxy(c,linhaFinal); printf("%c", borda[tipo][0]);
  }
-    for(l=linhaInicial+1;l<=linhaFinal-1;l++){//printa as bordas da esquerda e direita de cima pra baixo deixando espaço pras quinas
+    for(l=linhaInicial+1;l<=linhaFinal-1;l++){//printa as bordas da esquerda e direita de cima pra baixo deixando espaï¿½o pras quinas
         gotoxy(colunaInicial,l); printf("%c", borda[tipo][1]);
         gotoxy(colunaFinal,l); printf("%c", borda[tipo][1]);
     }
@@ -137,8 +139,8 @@ void Showmap(){
     // Desenha a borda externa da tela (fixa)
     moldura(1, 23, 1, 80, 0);
 
-    // CORREÇÃO: A altura da moldura (linha final) agora é dinâmica baseada em 'tam'
-    // Começa na linha 9 e vai até a linha (9 + tam + 1)
+    // CORREï¿½ï¿½O: A altura da moldura (linha final) agora ï¿½ dinï¿½mica baseada em 'tam'
+    // Comeï¿½a na linha 9 e vai atï¿½ a linha (9 + tam + 1)
     moldura(9, 9 + tam + 1, au, au + tam + 1, 1);
 
     for(l = 0; l < tam; l++){
@@ -172,7 +174,7 @@ int contamonstro(){
     return contmonstro;
 }
 
-void Spawn(int qntd){ //int qntd é pego do int main, no caso 10, entao serao no maximo 10 monstros
+void Spawn(int qntd){ //int qntd ï¿½ pego do int main, no caso 10, entao serao no maximo 10 monstros
     int x,y,cont,a=0;
     for(cont=1;cont<=qntd;cont++,a++){ // a e pra ver quantas vezes rolou no total, cont e pra comparar com a qntd, ele vai ate o cont superar o qntd
     x = rand()%tam; //sorteia um numero para o x de 0 a 6, ja que tam = 7
@@ -206,7 +208,7 @@ void frutas(int qntdf){
     }
 }
     /*gotoxy(85,5);
-    printf("a=%d",a);//contador de vezes em que o codigo rodou até colocar os M
+    printf("a=%d",a);//contador de vezes em que o codigo rodou atï¿½ colocar os M
 }*/
 void bossbattle(){
     int dano, danomonstro, dado, danosoma = 0, danomonstrosoma = 0, cont=0;
@@ -229,6 +231,7 @@ void bossbattle(){
             Beep(700, 300);
             Beep(600, 300);
             dinheiro = dinheiro + 100;
+            pontuacao = pontuacao + 100;
             Sleep(1000);
             printf("\033[25;25H\033[K");
             gotoxy(25,25);
@@ -239,7 +242,7 @@ void bossbattle(){
         danomonstrosoma = danomonstrosoma + danomonstro;
         heroi.vida = heroi.vida - danomonstro;
         gotoxy(25,25);
-        printf("você tomou %d de dano", danomonstro);
+        printf("vocï¿½ tomou %d de dano", danomonstro);
         Beep(200, 300);
         Sleep(1000);
         printf("\033[25;25H\033[K");
@@ -290,6 +293,7 @@ void bossbattle(){
             Beep(700, 300);
             Sleep(800);
             dinheiro = dinheiro + 50;
+            pontuacao = pontuacao + 50;
             printf("\033[25;25H\033[K");
             gotoxy(25,25);
             printf("a vida do heroi e %d", heroi.vida);
@@ -312,16 +316,16 @@ void ataque(){
         gotoxy(25,25);
         printf("voce deu %d de dano", dano);
         Beep(600, 300);
-        Sleep(1000);
+        Sleep(500);
         printf("\033[25;25H\033[K");
         cont++;
         if(monstro.vida <= 0){
             gotoxy(25,25);
             printf("voce ganhou!!!, dando %d de dano em %d rodadas", danosoma, cont);
-            Beep(700, 300);
-            Beep(600, 300);
+            Beep(700, 100);
+            Beep(600, 100);
             dinheiro = dinheiro + 50;
-            Sleep(1000);
+            Sleep(300);
             printf("\033[25;25H\033[K");
             gotoxy(25,25);
             printf("a vida do heroi e %d", heroi.vida);
@@ -331,16 +335,16 @@ void ataque(){
         danomonstrosoma = danomonstrosoma + danomonstro;
         heroi.vida = heroi.vida - danomonstro;
         gotoxy(25,25);
-        printf("você tomou %d de dano", danomonstro);
+        printf("voce tomou %d de dano", danomonstro);
         Beep(200, 300);
-        Sleep(1000);
+        Sleep(500);
         printf("\033[25;25H\033[K");
         cont++;
         if(heroi.vida <= 0){
             gotoxy(25,25);
             printf("voce perdeu!!!, tomou %d de dano em %d rodadas", danomonstrosoma, cont);
             Beep(200, 800);
-            Sleep(1000);
+            Sleep(500);
             printf("\033[25;25H\033[K");
             exit(0);
         }
@@ -355,14 +359,14 @@ void ataque(){
         gotoxy(25,25);
         printf("voce tomou %d de dano", danomonstro);
         Beep(200, 300);
-        Sleep(1000);
+        Sleep(500);
         printf("\033[25;25H\033[K");
         cont++;
         if(heroi.vida<=0){
             gotoxy(25,25);
             printf("voce perdeu, tomando %d de dano, em %d rodadas", danomonstrosoma, cont);
             Beep(200, 800);
-            Sleep(1000);
+            Sleep(500);
             printf("\033[25;25H\033[K");
             exit(0);
         }
@@ -372,15 +376,16 @@ void ataque(){
         gotoxy(25,25);
         printf("voce deu %d de dano", dano);
         Beep(600, 300);
-        Sleep(1000);
+        Sleep(500);
         printf("\033[25;25H\033[K");
         cont++;
         if(monstro.vida <= 0){
             gotoxy(25,25);
             printf("voce ganhou, dando %d de dano, em %d rodadas", danosoma, cont);
             Beep(700, 300);
-            Sleep(800);
+            Sleep(500);
             dinheiro = dinheiro + 50;
+            pontuacao = pontuacao + 50;
             printf("\033[25;25H\033[K");
             gotoxy(25,25);
             printf("a vida do heroi e %d", heroi.vida);
@@ -396,20 +401,49 @@ int fuga(){
     int y=25;
     if(fator<10){
         gotoxy(y,x);
-        printf("Golpe de Sorte deu errado, o monstro desviou!!!");
+        heroi.vida = heroi.vida - (2+contfase);
+        printf("Golpe de Sorte deu errado, voce perdeu %d de vida e ta com %d!!!",contfase+2, heroi.vida);
         Beep(200, 300);
-        Sleep(1500);
+        Sleep(800);
         printf("\033[25;25H\033[K");
         ataque();
     }else if(fator>=10){
         gotoxy(y,x);
         printf("Golpe de Sorte deu certo!!!");
-        Sleep(1000);
+        Sleep(800);
         dinheiro = dinheiro + 75;
+        pontuacao = pontuacao + 75;
         printf("\033[25;25H\033[K");
     }
 }
 void itemmenu(){
+
+}
+void rank(){
+    printf("parabens, voce terminou o jogo e fez %d pontos\n", pontuacao);
+    guarda = pontuacao;
+    if(guarda>a){
+        b = a;
+        c = b;
+        a = guarda;
+        printf("1 - %d\n", a);
+        printf("2 - %d\n", b);
+        printf("3 - %d\n", c);
+        Sleep(1000);
+    }else if(guarda>b){
+        c = b;
+        b = guarda;
+        printf("1 - %d\n", a);
+        printf("2 - %d\n", b);
+        printf("3 - %d\n", c);
+        Sleep(1000);
+    }else if(guarda>c){
+        c = guarda;
+        printf("1 - %d\n", a);
+        printf("2 - %d\n", b);
+        printf("3 - %d\n", c);
+        Sleep(1000);
+    }
 
 }
 void brigaboss(){
@@ -427,7 +461,7 @@ void brigaboss(){
     printf("\nescolha oque fazer:  ");erro = scanf("%d", &op);
     switch(op){
     case 1:
-        Sleep(1000);
+        Sleep(600);
         printf("\033[25;25H\033[K");
         printf("\033[26;26H\033[K");
         printf("\033[27;27H\033[K");
@@ -462,20 +496,20 @@ void briga(){
     op=getch();
     switch(op){
     case '1':
-        Sleep(1000);
+        Sleep(800);
         printf("\033[25;25H\033[K");
         printf("\033[26;26H\033[K");
         printf("\033[27;27H\033[K");
         printf("\033[28;28H\033[K");
         ataque();
-        Sleep(2000);
+        Sleep(800);
         system("cls");
         break;
     case '2':
-        Sleep(1000);
+        Sleep(800);
         printf("\033[25;25H\033[K");
         fuga();
-        Sleep(2000);
+        Sleep(800);
         system("cls");
         break;
    /* case '3':
@@ -483,7 +517,7 @@ void briga(){
         break;*/
     default:
         printf("invalido");
-        Sleep(1000);
+        Sleep(800);
         briga();
         system("cls");
         break;
@@ -505,16 +539,17 @@ void movi(char letra){ //movimenta pra baixo
                 heroi.vida = heroi.vida + 3;
                 gotoxy(25,25);
                 dinheiro = dinheiro + 10;
-                printf("você tava com %d de vida, agora é %d", heroi.vida - 3, heroi.vida);
-                Beep(220, 125); // Lá (A3)
-                Beep(233, 125); // Lá# (A#3)
+                pontuacao = pontuacao + 10;
+                printf("vocï¿½ tava com %d de vida, agora ï¿½ %d", heroi.vida - 3, heroi.vida);
+                Beep(220, 125); // Lï¿½ (A3)
+                Beep(233, 125); // Lï¿½# (A#3)
                 Beep(247, 125); // Si (B3)
-                Beep(261, 125); // Dó (C4)
+                Beep(261, 125); // Dï¿½ (C4)
 
-                Beep(277, 125); // Dó# (C#4)
-                Beep(294, 125); // Ré (D4)
-                Beep(311, 125); // Ré# (D#4)
-                Beep(330, 125); // Mí (E4)
+                Beep(277, 125); // Dï¿½# (C#4)
+                Beep(294, 125); // Rï¿½ (D4)
+                Beep(311, 125); // Rï¿½# (D#4)
+                Beep(330, 125); // Mï¿½ (E4)
 
                 Sleep(800);
                 printf("\033[25;25H\033[K");
@@ -535,17 +570,18 @@ void movi(char letra){ //movimenta pra baixo
             }else if(mapa[heroi.posx][heroi.posy+1] == 'F'){
                 heroi.vida = heroi.vida + 3;
                 dinheiro = dinheiro + 10;
+                pontuacao = pontuacao + 10;
                 gotoxy(25,25);
-                printf("você tava com %d de vida, agora é %d", heroi.vida - 3, heroi.vida);
-                Beep(220, 125); // Lá (A3)
-                Beep(233, 125); // Lá# (A#3)
+                printf("vocï¿½ tava com %d de vida, agora ï¿½ %d", heroi.vida - 3, heroi.vida);
+                Beep(220, 125); // Lï¿½ (A3)
+                Beep(233, 125); // Lï¿½# (A#3)
                 Beep(247, 125); // Si (B3)
-                Beep(261, 125); // Dó (C4)
+                Beep(261, 125); // Dï¿½ (C4)
 
-                Beep(277, 125); // Dó# (C#4)
-                Beep(294, 125); // Ré (D4)
-                Beep(311, 125); // Ré# (D#4)
-                Beep(330, 125); // Mí (E4)
+                Beep(277, 125); // Dï¿½# (C#4)
+                Beep(294, 125); // Rï¿½ (D4)
+                Beep(311, 125); // Rï¿½# (D#4)
+                Beep(330, 125); // Mï¿½ (E4)
                 Sleep(800);
                 printf("\033[25;25H\033[K");
             }else if(mapa[heroi.posx][heroi.posy+1] == 'B'){
@@ -565,16 +601,17 @@ void movi(char letra){ //movimenta pra baixo
                 heroi.vida = heroi.vida + 3;
                 gotoxy(25,25);
                 dinheiro = dinheiro + 10;
+                pontuacao = pontuacao + 10;
                 printf("voce estava com %d de vida, agora esta com %d", heroi.vida - 3, heroi.vida);
-                Beep(220, 125); // Lá (A3)
-                Beep(233, 125); // Lá# (A#3)
+                Beep(220, 125); // Lï¿½ (A3)
+                Beep(233, 125); // Lï¿½# (A#3)
                 Beep(247, 125); // Si (B3)
-                Beep(261, 125); // Dó (C4)
+                Beep(261, 125); // Dï¿½ (C4)
 
-                Beep(277, 125); // Dó# (C#4)
-                Beep(294, 125); // Ré (D4)
-                Beep(311, 125); // Ré# (D#4)
-                Beep(330, 125); // Mí (E4)
+                Beep(277, 125); // Dï¿½# (C#4)
+                Beep(294, 125); // Rï¿½ (D4)
+                Beep(311, 125); // Rï¿½# (D#4)
+                Beep(330, 125); // Mï¿½ (E4)
                 Sleep(800);
                 printf("\033[25;25H\033[K");
             }else if(mapa[heroi.posx][heroi.posy-1] == 'B'){
@@ -593,17 +630,18 @@ void movi(char letra){ //movimenta pra baixo
             }else if(mapa[heroi.posx-1][heroi.posy] == 'F'){
                 heroi.vida = heroi.vida + 3;
                 dinheiro = dinheiro + 10;
+                pontuacao = pontuacao + 10;
                 gotoxy(25,25);
                 printf("voce estava com %d de vida, agora esta com %d", heroi.vida - 3, heroi.vida);
-                Beep(220, 125); // Lá (A3)
-                Beep(233, 125); // Lá# (A#3)
+                Beep(220, 125); // Lï¿½ (A3)
+                Beep(233, 125); // Lï¿½# (A#3)
                 Beep(247, 125); // Si (B3)
-                Beep(261, 125); // Dó (C4)
+                Beep(261, 125); // Dï¿½ (C4)
 
-                Beep(277, 125); // Dó# (C#4)
-                Beep(294, 125); // Ré (D4)
-                Beep(311, 125); // Ré# (D#4)
-                Beep(330, 125); // Mí (E4)
+                Beep(277, 125); // Dï¿½# (C#4)
+                Beep(294, 125); // Rï¿½ (D4)
+                Beep(311, 125); // Rï¿½# (D#4)
+                Beep(330, 125); // Mï¿½ (E4)
                 Sleep(800);
                 printf("\033[25;25H\033[K");
             }else if(mapa[heroi.posx-1][heroi.posy] == 'B'){
@@ -643,7 +681,7 @@ void loja(){
                 dinheiro = dinheiro - 100;
                 heroi.atq = heroi.atq + 1;
                 printf("\nagora voce ta com %d de dano", heroi.atq);
-                Sleep(2000);
+                Sleep(1000);
                 system("cls");
             }
             break;
@@ -670,7 +708,7 @@ void loja(){
             dinheiro = dinheiro - 70;
                 heroi.vida = heroi.vida + 1;
                 printf("\nagora voce ta com %d de vida", heroi.vida);
-                Sleep(2000);
+                Sleep(1000);
                 system("cls");
             }
     /*            printf("\ngostaria de comprar mais?\n");
@@ -694,7 +732,7 @@ void loja(){
                 dinheiro = dinheiro - 140;
                 heroi.dfs = heroi.dfs + 1;
                 printf("\nvoce ta com %d de defesa\n", heroi.dfs);
-                Sleep(2000);
+                Sleep(1000);
                 system("cls");
             }
     /*        printf("gostaria de comprar mais?\n");
@@ -719,7 +757,7 @@ void loja(){
                 break;
         default:
              printf("invalido");
-             Sleep(1000);
+             Sleep(800);
             system("cls");
         }
 
@@ -768,7 +806,7 @@ int main(){
     }
     char letra;
     srand(time(NULL));
-    heroi.posx = heroi.posy = 0; //definição dupla para o jogador começar em 0,0
+    heroi.posx = heroi.posy = 0; //definiï¿½ï¿½o dupla para o jogador comeï¿½ar em 0,0
     char nomeJogo[]="Beans with Flour";
     gotoxy((80-strlen(nomeJogo))/2,5); //usa strlen pra pegar o numero de caracteres e por isso delimitar o centro
     printf("%s", nomeJogo);
@@ -779,11 +817,12 @@ int main(){
     printf("a vida do heroi e %d", heroi.vida);
  do{
  Showmap();
-  gotoxy(10, 26);
-printf("FASE ATUAL: %d / 3 | Dinheiro: R$ %d  ",fase+1, dinheiro);
+ gotoxy(10, 26);
+ printf("FASE ATUAL: %d / 3 | Dinheiro: R$ %d  ",fase+1, dinheiro);
  gotoxy(10, 27);
-printf("Sua Vida: %d  | Ataque: %d | Defesa: %d", heroi.vida, heroi.atq, heroi.dfs);
+ printf("Sua Vida: %d  | Ataque: %d | Defesa: %d", heroi.vida, heroi.atq, heroi.dfs);
  letra = getch(); //pega a letra, se for s ele vai pra baixo
+ fflush(stdin);
  movi(letra);
  perigo = contamonstro();
  gotoxy(1,29);
@@ -821,5 +860,3 @@ printf("Sua Vida: %d  | Ataque: %d | Defesa: %d", heroi.vida, heroi.atq, heroi.d
  }while(letra!=27); //ate o usuario apertar esc
  getch();
 }
-
-
